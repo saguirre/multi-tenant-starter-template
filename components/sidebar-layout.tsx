@@ -99,7 +99,7 @@ function SidebarContent(props: {
           } else {
             return (
               <div key={index} className="flex my-2">
-                <div className="flex-grow justify-start text-sm font-medium text-zinc-500 px-2">
+                <div className="flex-grow justify-start text-sm font-medium text-zinc-500 px-3">
                   {item.name}
                 </div>
               </div>

@@ -14,11 +14,11 @@ const navigationItems: SidebarItem[] = [
   },
   {
     type: 'label',
-    name: 'Management',
+    name: 'You',
   },
   {
-    name: "Products",
-    href: "/products",
+    name: "Reveals",
+    href: "/reveals",
     icon: ShoppingBag,
     type: "item",
   },
@@ -29,24 +29,12 @@ const navigationItems: SidebarItem[] = [
     type: "item",
   },
   {
-    name: "Segments",
-    href: "/segments",
-    icon: Columns3,
-    type: "item",
-  },
-  {
-    name: "Regions",
-    href: "/regions",
-    icon: Locate,
-    type: "item",
-  },
-  {
     type: 'label',
-    name: 'Monetization',
+    name: 'Insights',
   },
   {
-    name: "Revenue",
-    href: "/revenue",
+    name: "Stats",
+    href: "/stats",
     icon: BarChart4,
     type: "item",
   },
@@ -85,16 +73,13 @@ export default function Layout(props: { children: React.ReactNode }) {
     return null;
   }
 
+  console.log(team);
   return (
     <SidebarLayout 
       items={navigationItems}
       basePath={`/dashboard/${team.id}`}
-      sidebarTop={<SelectedTeamSwitcher 
-        selectedTeam={team}
-        urlMap={(team) => `/dashboard/${team.id}`}
-      />}
       baseBreadcrumb={[{
-        title: team.displayName,
+        title: 'Home',
         href: `/dashboard/${team.id}`,
       }]}
     >

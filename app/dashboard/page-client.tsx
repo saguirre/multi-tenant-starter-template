@@ -24,7 +24,7 @@ export function PageClient() {
       <div className="flex items-center justify-center h-screen w-screen">
         <div className="max-w-xs w-full">
           <h1 className="text-center text-2xl font-semibold">Welcome!</h1>
-          <p className="text-center text-gray-500">Create a team to get started</p>
+          <p className="text-center text-gray-500">Create a reveal group to get started</p>
           <form
             className="mt-4"
             onSubmit={(e) => {
@@ -33,14 +33,14 @@ export function PageClient() {
             }}
           >
             <div>
-              <Label className="text-sm">Team name</Label>
+              <Label className="text-sm">Reveal group name</Label>
               <Input
-                placeholder="Team name"
+                placeholder="Reveal group name"
                 value={teamDisplayName}
                 onChange={(e) => setTeamDisplayName(e.target.value)}
               />
             </div>
-            <Button className="mt-4 w-full">Create team</Button>
+            <Button className="mt-4 w-full">Create reveal group</Button>
           </form>
         </div>
       </div>

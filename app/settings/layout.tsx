@@ -1,10 +1,9 @@
 'use client';
 
-import { AppSidebar } from '@/components/app-sidebar';
+import { SettingsSidebar } from '@/components/settings-sidebar';
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
@@ -12,7 +11,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { useUser } from '@stackframe/stack';
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 function useSegment(basePath: string) {
   const path = usePathname();
@@ -20,27 +19,18 @@ function useSegment(basePath: string) {
   return result ? result : '/';
 }
 
-export default function Layout(props: { children: React.ReactNode }) {
-  const params = useParams<{ teamId: string }>();
+export default function SettingsLayout({ children }: { children: React.ReactNode }) {
   const user = useUser({ or: 'redirect' });
-  const team = user.useTeam(params.teamId);
-  const router = useRouter();
-  const segment = useSegment(`/dashboard/${params.teamId}`);
-
-  if (!team) {
-    router.push('/dashboard');
-    return null;
-  }
-
+  const segment = useSegment('/settings');
+  
   // Get the current page name from the segment
   const segments = segment.split('/').filter(Boolean);
-  const currentPage = segments[segments.length - 1] || 'Overview'; // Default to 'Overview' if no segment
-
+  const currentPage = segments[segments.length - 1] || 'Profile'; // Default to 'Profile' if no segment
   const pageTitle = currentPage.charAt(0).toUpperCase() + currentPage.slice(1);
 
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <SettingsSidebar />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
           <div className="flex items-center gap-2 px-4">
@@ -48,10 +38,6 @@ export default function Layout(props: { children: React.ReactNode }) {
             <Separator orientation="vertical" className="mr-2 h-4" />
             <Breadcrumb>
               <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href={`/dashboard/${team.id}`}>Dashboard</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
                   <BreadcrumbPage>{pageTitle}</BreadcrumbPage>
                 </BreadcrumbItem>
@@ -59,7 +45,7 @@ export default function Layout(props: { children: React.ReactNode }) {
             </Breadcrumb>
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{props.children}</div>
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );

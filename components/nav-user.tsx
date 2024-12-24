@@ -13,15 +13,13 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar';
-import { User, useStackApp } from '@stackframe/stack';
+import { SignOutButton } from '@clerk/nextjs';
 
-export function NavUser({ user }: { user: User }) {
+export function NavUser({ user }: { user: any }) {
   const { isMobile } = useSidebar();
-  const app = useStackApp();
 
-  const handleSignOut = async () => {
-    await app.redirectToSignOut();
-  };
+  console.log('user', user);
+  const handleSignOut = async () => {};
 
   return (
     <SidebarMenu>
@@ -33,12 +31,16 @@ export function NavUser({ user }: { user: User }) {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.profileImageUrl || ''} alt={user.displayName || user.id} />
-                <AvatarFallback className="rounded-lg">{user.displayName?.substring(0, 2) || 'U'}</AvatarFallback>
+                <AvatarImage src={user?.imageUrl || ''} alt={user?.fullName || user?.id} />
+                <AvatarFallback className="rounded-lg uppercase">
+                  {user?.fullName?.substring(0, 2) || 'U'}
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user.displayName || user.primaryEmail}</span>
-                <span className="truncate text-xs">{user.primaryEmail}</span>
+                <span className="truncate font-semibold">
+                  {user?.fullName || user?.primaryEmailAddress?.emailAddress}
+                </span>
+                <span className="truncate text-xs">{user?.primaryEmailAddress?.emailAddress}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -52,12 +54,14 @@ export function NavUser({ user }: { user: User }) {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.profileImageUrl || ''} alt={user.displayName || user.id} />
-                  <AvatarFallback className="rounded-lg">{user.displayName?.substring(0, 2) || 'U'}</AvatarFallback>
+                  <AvatarImage src={user?.imageUrl || ''} alt={user?.fullName || user?.id} />
+                  <AvatarFallback className="rounded-lg">{user?.fullName?.substring(0, 2) || 'U'}</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">{user.displayName || user.primaryEmail}</span>
-                  <span className="truncate text-xs">{user.primaryEmail}</span>
+                  <span className="truncate font-semibold">
+                    {user?.fullName || user?.primaryEmailAddress?.emailAddress}
+                  </span>
+                  <span className="truncate text-xs">{user?.primaryEmailAddress?.emailAddress}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
@@ -86,7 +90,7 @@ export function NavUser({ user }: { user: User }) {
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
               <LogOut className="mr-2 h-4 w-4" />
-              Log out
+              <SignOutButton />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

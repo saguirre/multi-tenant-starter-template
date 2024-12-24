@@ -2,14 +2,15 @@
 
 import { BentoGrid } from '@/components/ui/bento-grid';
 import { BentoCard } from '@/components/ui/bento-grid';
-import { ArrowRightIcon, Sparkles, Wand2, PartyPopper, Cake, Gift, Stars } from 'lucide-react';
+import { ArrowRightIcon, Sparkles, Wand2, PartyPopper, Gift, Stars } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const templates = [
   {
     name: 'Classic Balloon Pop',
     price: '$29.99',
-    description: 'A timeless reveal with a giant black balloon filled with pink or blue confetti. Perfect for both indoor and outdoor celebrations.',
+    description:
+      'A timeless reveal with a giant black balloon filled with pink or blue confetti. Perfect for both indoor and outdoor celebrations.',
     icon: PartyPopper,
     background: <div className="absolute inset-0 bg-gradient-to-br from-pink-100 to-blue-100 opacity-50" />,
     href: '/templates/balloon-pop',
@@ -49,13 +50,14 @@ const templates = [
   {
     name: 'Enchanted Garden',
     price: '$49.99',
-    description: 'Transform your space into a magical garden that blooms in pink or blue. Features animated butterflies and floating petals.',
+    description:
+      'Transform your space into a magical garden that blooms in pink or blue. Features animated butterflies and floating petals.',
     icon: Wand2,
     background: <div className="absolute inset-0 bg-gradient-to-br from-rose-100 to-sky-100 opacity-50" />,
     href: '/templates/enchanted-garden',
     cta: 'Customize template',
     className: 'lg:col-start-3 lg:col-end-4 lg:row-start-2 lg:row-end-4',
-  }
+  },
 ];
 
 export default function DashboardPage() {

@@ -4,34 +4,24 @@ import { PricingGrid } from '@/components/pricing';
 import { ReviewsSection } from '@/components/reviews';
 import { TemplateOverview } from '@/components/template-overview';
 import BlurFade from '@/components/ui/blur-fade';
-import { stackServerApp } from '@/stack';
 import { Wand2, Palette, Lock, Users, Gamepad2, Settings } from 'lucide-react';
-import { redirect } from 'next/navigation';
 
 export default async function IndexPage() {
-  const project = await stackServerApp.getProject();
-  const session = await stackServerApp.getUser();
-
-  if (session) {
-    const team = session.selectedTeam;
-    redirect(`/dashboard/${team?.id}`);
-  }
-
   return (
     <>
       <Hero
         capsuleText="100+ 5 Star Reviews"
-        capsuleLink="https://stacktemplate.com"
+        capsuleLink="https://reveal.com"
         title="Build your dream Gender Reveal"
         subtitle="Built for expecting parents, by expecting parents."
         primaryCtaText="Get Started"
-        primaryCtaLink={stackServerApp.urls.signUp}
+        primaryCtaLink=""
         secondaryCtaText="GitHub"
-        secondaryCtaLink="https://github.com/stack-auth/stack-template"
+        secondaryCtaLink="https://github.com/saguirre/reveal"
         credits={
           <>
             Crafted with ❤️ by{' '}
-            <a href="https://stack-auth.com" target="_blank" rel="noreferrer" className="underline">
+            <a href="https://santiagoaguirre.dev" target="_blank" rel="noreferrer" className="underline">
               AI Lime
             </a>
           </>
@@ -106,7 +96,7 @@ export default async function IndexPage() {
               'Mobile friendly',
             ],
             buttonText: 'Get Started',
-            buttonHref: stackServerApp.urls.signUp,
+            buttonHref: '',
           },
           {
             title: 'Pro',
@@ -121,7 +111,7 @@ export default async function IndexPage() {
             ],
             buttonText: 'Upgrade to Pro',
             isPopular: true,
-            buttonHref: stackServerApp.urls.signUp,
+            buttonHref: '',
           },
           {
             title: 'Party Pack',
@@ -135,7 +125,7 @@ export default async function IndexPage() {
               'Priority support',
             ],
             buttonText: 'Contact Us',
-            buttonHref: stackServerApp.urls.signUp,
+            buttonHref: '',
           },
         ]}
       />

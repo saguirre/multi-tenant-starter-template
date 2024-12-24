@@ -9,7 +9,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 import { Separator } from '@/components/ui/separator';
-import { useUser } from '@stackframe/stack';
+import { useUser } from '@clerk/nextjs';
 import { usePathname } from 'next/navigation';
 
 function useSegment(basePath: string) {
@@ -19,12 +19,11 @@ function useSegment(basePath: string) {
 }
 
 export function AccountHeader() {
-  const user = useUser({ or: 'redirect' });
   const segment = useSegment('/account');
 
   // Get the current page name from the segment
   const segments = segment.split('/').filter(Boolean);
-  const currentPage = segments[segments.length - 1] || 'Profile'; // Default to 'Profile' if no segment
+  const currentPage = segments[segments.length - 1] || 'Profile';
 
   const pageTitle = currentPage.charAt(0).toUpperCase() + currentPage.slice(1);
 
@@ -46,4 +45,4 @@ export function AccountHeader() {
       </div>
     </header>
   );
-} 
+}

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "db:generate": "drizzle-kit generate --dialect=postgresql --schema=db/schema.ts --out=./drizzle",
     "db:seed": "tsx db/seed.ts",
@@ -11,6 +11,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/backend": "^1.21.4",
+    "@clerk/nextjs": "^6.9.6",
     "@neondatabase/serverless": "^0.10.4",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-collapsible": "^1.1.2",
@@ -21,7 +23,6 @@
     "@radix-ui/react-separator": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.1",
     "@radix-ui/react-tooltip": "^1.1.5",
-    "@stackframe/stack": "^2.5.37",
     "@types/canvas-confetti": "^1.9.0",
     "canvas-confetti": "^1.9.3",
     "class-variance-authority": "^0.7.1",
@@ -29,9 +30,10 @@
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.38.2",
+    "encore.dev": "^1.45.2",
     "framer-motion": "^11.15.0",
     "lucide-react": "^0.468.0",
-    "next": "^14.2.13",
+    "next": "^15.1.2",
     "next-themes": "^0.2.1",
     "react": "^18",
     "react-day-picker": "8.10.1",
@@ -41,7 +43,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "^22.10.2",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "drizzle-kit": "^0.30.1",

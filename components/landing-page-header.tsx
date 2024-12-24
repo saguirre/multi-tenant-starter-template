@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { cn } from "@/lib/utils";
-import { useStackApp, useUser } from "@stackframe/stack";
-import { Menu, X } from "lucide-react";
-import Link from "next/link";
-import { useSelectedLayoutSegment } from "next/navigation";
-import * as React from "react";
-import { ColorModeSwitcher } from "./color-mode-switcher";
-import { Logo } from "./logo";
-import { Button, buttonVariants } from "./ui/button";
+import { cn } from '@/lib/utils';
+import { Menu, X } from 'lucide-react';
+import Link from 'next/link';
+import { useSelectedLayoutSegment } from 'next/navigation';
+import * as React from 'react';
+import { ColorModeSwitcher } from './color-mode-switcher';
+import { Logo } from './logo';
+import { Button, buttonVariants } from './ui/button';
+import { useUser } from '@clerk/nextjs';
 
 interface NavProps {
   items?: {
@@ -20,20 +20,13 @@ interface NavProps {
 }
 
 function SignInSignUpButtons() {
-  const app = useStackApp();
   return (
     <>
-      <Link
-        href={app.urls.signIn}
-        className={buttonVariants({ variant: "secondary" })}
-      >
+      <Link href="/sign-in" className={buttonVariants({ variant: 'secondary' })}>
         Sign In
       </Link>
 
-      <Link
-        href={app.urls.signUp}
-        className={buttonVariants({ variant: "default" })}
-      >
+      <Link href="/sign-up" className={buttonVariants({ variant: 'default' })}>
         Sign Up
       </Link>
     </>
@@ -41,14 +34,10 @@ function SignInSignUpButtons() {
 }
 
 function AuthButtonsInner() {
-  const user = useUser();
-
-  if (user) {
+  const { isSignedIn } = useUser();
+  if (isSignedIn) {
     return (
-      <Link
-        href="/dashboard"
-        className={buttonVariants({ variant: "default" })}
-      >
+      <Link href="/dashboard" className={buttonVariants({ variant: 'default' })}>
         Dashboard
       </Link>
     );
@@ -73,13 +62,13 @@ function MobileItems(props: NavProps) {
           {props.items?.map((item, index) => (
             <Link
               key={index}
-              href={item.disabled ? "#" : item.href}
+              href={item.disabled ? '#' : item.href}
               className={cn(
-                "flex w-full items-center rounded-md p-2 text-sm font-medium hover:underline",
-                item.disabled && "cursor-not-allowed opacity-60"
+                'flex w-full items-center rounded-md p-2 text-sm font-medium hover:underline',
+                item.disabled && 'cursor-not-allowed opacity-60'
               )}
-              target={item.external ? "_blank" : undefined}
-              rel={item.external ? "noreferrer" : undefined}
+              target={item.external ? '_blank' : undefined}
+              rel={item.external ? 'noreferrer' : undefined}
             >
               {item.title}
             </Link>
@@ -102,16 +91,14 @@ function DesktopItems(props: NavProps) {
       {props.items?.map((item, index) => (
         <Link
           key={index}
-          href={item.disabled ? "#" : item.href}
+          href={item.disabled ? '#' : item.href}
           className={cn(
-            "flex items-center text-lg font-medium transition-colors hover:text-foreground/80 sm:text-sm",
-            item.href.startsWith(`/${segment}`)
-              ? "text-foreground"
-              : "text-foreground/60",
-            item.disabled && "cursor-not-allowed opacity-80"
+            'flex items-center text-lg font-medium transition-colors hover:text-foreground/80 sm:text-sm',
+            item.href.startsWith(`/${segment}`) ? 'text-foreground' : 'text-foreground/60',
+            item.disabled && 'cursor-not-allowed opacity-80'
           )}
-          target={item.external ? "_blank" : undefined}
-          rel={item.external ? "noreferrer" : undefined}
+          target={item.external ? '_blank' : undefined}
+          rel={item.external ? 'noreferrer' : undefined}
         >
           {item.title}
         </Link>
@@ -137,11 +124,7 @@ export function LandingPageHeader(props: NavProps) {
             size="icon"
             onClick={() => setShowMobileMenu(!showMobileMenu)}
           >
-            {showMobileMenu ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
+            {showMobileMenu ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </Button>
 
           <Logo className="md:hidden" />

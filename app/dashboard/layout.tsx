@@ -11,8 +11,7 @@ import {
 } from '@/components/ui/breadcrumb';
 import { Separator } from '@/components/ui/separator';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
-import { useUser } from '@stackframe/stack';
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 
 function useSegment(basePath: string) {
   const path = usePathname();
@@ -22,15 +21,7 @@ function useSegment(basePath: string) {
 
 export default function Layout(props: { children: React.ReactNode }) {
   const params = useParams<{ teamId: string }>();
-  const user = useUser({ or: 'redirect' });
-  const team = user.useTeam(params.teamId);
-  const router = useRouter();
   const segment = useSegment(`/dashboard/${params.teamId}`);
-
-  if (!team) {
-    router.push('/dashboard');
-    return null;
-  }
 
   // Get the current page name from the segment
   const segments = segment.split('/').filter(Boolean);
@@ -49,7 +40,7 @@ export default function Layout(props: { children: React.ReactNode }) {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href={`/dashboard/${team.id}`}>Dashboard</BreadcrumbLink>
+                  <BreadcrumbLink href={`/dashboard`}>Dashboard</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>

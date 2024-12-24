@@ -1,8 +1,6 @@
-export function FeatureGridItem(props: {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-}) {
+import BlurFade from '@/components/ui/blur-fade';
+
+export function FeatureGridItem(props: { icon: React.ReactNode; title: string; description: string }) {
   return (
     <div className="relative overflow-hidden rounded-lg border bg-background p-2">
       <div className="flex h-[180px] flex-col rounded-md p-6 gap-4">
@@ -26,24 +24,21 @@ export function FeatureGrid(props: {
   }[];
 }) {
   return (
-    <section
-      id="features"
-      className="container space-y-6 py-8 md:py-12 lg:py-24"
-    >
-      <div className="mx-auto flex max-w-6xl flex-col items-center space-y-4 text-center">
-        <h2 className="text-3xl md:text-4xl font-semibold">
-          {props.title}
-        </h2>
-        <p className="max-w-[85%] text-muted-foreground sm:text-lg">
-          {props.subtitle}
-        </p>
-      </div>
+    <section id="features" className="container space-y-6 py-8 md:py-12 lg:py-24">
+      <BlurFade delay={0.25} inView>
+        <div className="mx-auto flex max-w-6xl flex-col items-center space-y-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-semibold">{props.title}</h2>
+          <p className="max-w-[85%] text-muted-foreground sm:text-lg">{props.subtitle}</p>
+        </div>
+      </BlurFade>
 
-      <div className="mx-auto grid justify-center gap-4 sm:grid-cols-2 md:max-w-5xl md:grid-cols-3">
-        {props.items.map((item, index) => (
-          <FeatureGridItem key={index} {...item} />
-        ))}
-      </div>
+      <BlurFade delay={0.35} inView>
+        <div className="mx-auto grid justify-center gap-4 sm:grid-cols-2 md:max-w-5xl md:grid-cols-3">
+          {props.items.map((item, index) => (
+            <FeatureGridItem key={index} {...item} />
+          ))}
+        </div>
+      </BlurFade>
     </section>
   );
 }

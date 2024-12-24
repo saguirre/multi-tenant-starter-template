@@ -1,6 +1,7 @@
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import Link from 'next/link';
+import BlurFade from '@/components/ui/blur-fade';
 
 export function Hero(props: {
   capsuleText: string;
@@ -16,40 +17,39 @@ export function Hero(props: {
   return (
     <section className="space-y-6 py-32 md:py-48 lg:py-52">
       <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">
-        <Link
-          href={props.capsuleLink}
-          className="rounded-2xl bg-muted px-4 py-1.5 text-sm font-medium"
-          target="_blank"
-        >
-          {props.capsuleText}
-        </Link>
-        <h1 className="font-heading text-3xl sm:text-5xl lg:text-7xl">
-          {props.title}
-        </h1>
-        <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
-          {props.subtitle}
-        </p>
-        <div className="flex gap-4 flex-wrap justify-center">
-          <Link
-            href={props.primaryCtaLink}
-            className={cn(buttonVariants({ size: "lg" }))}
-          >
-            {props.primaryCtaText}
-          </Link>
+        <BlurFade delay={0.25} inView>
+          <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">
+            <Link
+              href={props.capsuleLink}
+              className="rounded-2xl bg-muted px-4 py-1.5 text-sm font-medium"
+              target="_blank"
+            >
+              {props.capsuleText}
+            </Link>
+            <h1 className="font-heading text-3xl sm:text-5xl lg:text-7xl">{props.title}</h1>
+            <p className="max-w-[42rem] text-center leading-normal text-muted-foreground sm:text-xl sm:leading-8">
+              {props.subtitle}
+            </p>
+          </div>
+        </BlurFade>
+        <BlurFade delay={0.35} inView>
+          <div className="flex gap-4 flex-wrap justify-center">
+            <Link href={props.primaryCtaLink} className={cn(buttonVariants({ size: 'lg' }))}>
+              {props.primaryCtaText}
+            </Link>
 
-          <Link
-            href={props.secondaryCtaLink}
-            target="_blank"
-            rel="noreferrer"
-            className={cn(buttonVariants({ variant: "outline", size: "lg" }))}
-          >
-            {props.secondaryCtaText}
-          </Link>
-        </div>
+            <Link
+              href={props.secondaryCtaLink}
+              target="_blank"
+              rel="noreferrer"
+              className={cn(buttonVariants({ variant: 'outline', size: 'lg' }))}
+            >
+              {props.secondaryCtaText}
+            </Link>
+          </div>
 
-        {props.credits && (
-          <p className="text-sm text-muted-foreground mt-4">{props.credits}</p>
-        )}
+          {props.credits && <p className="text-sm text-muted-foreground mt-4">{props.credits}</p>}
+        </BlurFade>
       </div>
     </section>
   );

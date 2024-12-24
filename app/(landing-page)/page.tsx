@@ -1,6 +1,9 @@
 import { FeatureGrid } from '@/components/features';
 import { Hero } from '@/components/hero';
 import { PricingGrid } from '@/components/pricing';
+import { ReviewsSection } from '@/components/reviews';
+import { TemplateOverview } from '@/components/template-overview';
+import BlurFade from '@/components/ui/blur-fade';
 import { stackServerApp } from '@/stack';
 import { Wand2, Palette, Lock, Users, Gamepad2, Settings } from 'lucide-react';
 import { redirect } from 'next/navigation';
@@ -10,22 +13,8 @@ export default async function IndexPage() {
   const session = await stackServerApp.getUser();
 
   if (session) {
-    redirect('/dashboard');
-  }
-
-  if (!project.config.clientTeamCreationEnabled) {
-    return (
-      <div className="w-full min-h-96 flex items-center justify-center">
-        <div className="max-w-xl gap-4">
-          <p className="font-bold text-xl">Setup Required</p>
-          <p className="">
-            {
-              'To start using this project, please enable client-side team creation in the Stack Auth dashboard (Project > Team Settings). This message will disappear once the feature is enabled.'
-            }
-          </p>
-        </div>
-      </div>
-    );
+    const team = session.selectedTeam;
+    redirect(`/dashboard/${team?.id}`);
   }
 
   return (
@@ -48,7 +37,20 @@ export default async function IndexPage() {
           </>
         }
       />
-
+      <div id="templates" />
+      <section className="container space-y-6 pb-8 md:pb-12 lg:pb-24">
+        <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">
+          <BlurFade delay={0.25} inView>
+            <div className="mx-auto flex max-w-6xl flex-col items-center space-y-4 text-center">
+              <h2 className="text-3xl md:text-4xl font-semibold">Templates</h2>
+              <p className="max-w-[100%] text-muted-foreground sm:text-lg">Check out our pre-built reveals</p>
+            </div>
+          </BlurFade>
+          <BlurFade delay={0.25} inView>
+            <TemplateOverview />
+          </BlurFade>
+        </div>
+      </section>
       <div id="features" />
       <FeatureGrid
         title="Features"
@@ -137,6 +139,9 @@ export default async function IndexPage() {
           },
         ]}
       />
+      <div id="reviews" />
+
+      <ReviewsSection />
     </>
   );
 }

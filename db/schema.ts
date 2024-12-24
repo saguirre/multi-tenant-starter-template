@@ -11,14 +11,151 @@ import {
   varchar,
   index,
 } from 'drizzle-orm/pg-core';
-import type { InferModel } from 'drizzle-orm';
 
 // Enums - define them first
 export const StepType = pgEnum('step_type', ['game', 'video', 'trivia']);
 export const RevealStatus = pgEnum('reveal_status', ['draft', 'active', 'completed']);
-export const Gender = pgEnum('gender', ['boy', 'girl', 'twins_bb', 'twins_gg', 'twins_bg']);
-export const GameType = pgEnum('game_type', ['puzzle', 'memory', 'quiz', 'countdown', 'scratch_card', 'balloon_pop']);
 export const UserRevealRole = pgEnum('user_reveal_role', ['admin', 'viewer']);
+export const GameType = pgEnum('game_type', [
+  'matching',
+  'jigsaw',
+  'whackABaby',
+  'bubblePop',
+  'timerBar',
+  'wordSearch',
+  'memorySequence',
+  'quiz',
+  'countdown',
+  'scratchCard',
+  'arcade',
+  'paintReveal',
+  'musicRhythm',
+]);
+export const GameDifficulty = pgEnum('game_difficulty', ['easy', 'medium', 'hard']);
+export const WinConditionType = pgEnum('win_condition_type', [
+  'score',
+  'time',
+  'completion',
+  'precision',
+  'pattern',
+  'accuracy',
+  'collection',
+]);
+
+export const Gender = pgEnum('gender', ['boy', 'girl', 'twins_bb', 'twins_gg', 'twins_bg']);
+
+export const gameTemplate = pgTable('game_template', {
+  id: serial('id').primaryKey(),
+  type: GameType('type').notNull(),
+  name: text('name').notNull(),
+  description: text('description'),
+  difficulty: GameDifficulty('difficulty').default('medium'),
+  defaultConfig: json('default_config').notNull(),
+  presentation: json('presentation').$type<{
+    theme?: 'boy' | 'girl' | 'neutral';
+    sounds?: boolean;
+    haptics?: boolean;
+    customAssets?: string[];
+  }>(),
+  winCondition: json('win_condition').$type<{
+    type: typeof WinConditionType;
+    target: number;
+    threshold?: number;
+  }>(),
+  isActive: boolean('is_active').default(true).notNull(),
+  metadata: json('metadata').$type<{
+    recommendedAge?: number[];
+    estimatedDuration?: number;
+    category?: string[];
+    tags?: string[];
+  }>(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const userGameProgress = pgTable('user_game_progress', {
+  id: serial('id').primaryKey(),
+  userId: varchar('user_id', { length: 255 }).notNull(),
+  gameId: integer('game_id')
+    .references(() => game.id)
+    .notNull(),
+  progress: json('progress').notNull(),
+  attempts: integer('attempts').default(0),
+  bestScore: integer('best_score'),
+  timeSpent: integer('time_spent').default(0),
+  hintUsed: boolean('hint_used').default(false),
+  completed: boolean('completed').default(false).notNull(),
+  completedAt: timestamp('completed_at'),
+  analytics: json('analytics').$type<{
+    clickMap?: Record<string, number>;
+    pathTaken?: string[];
+    errorCount?: number;
+  }>(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const game = pgTable('game', {
+  id: serial('id').primaryKey(),
+  revealStepId: integer('reveal_step_id')
+    .references(() => revealStep.id)
+    .notNull(),
+  gameTemplateId: integer('game_template_id')
+    .references(() => gameTemplate.id)
+    .notNull(),
+  config: json('config').$type<{
+    timeLimit?: number;
+    hints?: number;
+    customInstructions?: string;
+    grid?: {
+      size?: number;
+      rows?: number;
+      columns?: number;
+      directions?: string[];
+    };
+    pairs?: Array<{
+      id: string;
+      content: string;
+      matched?: boolean;
+    }>;
+    words?: Array<{
+      word: string;
+      hint?: string;
+      gender: typeof Gender;
+    }>;
+    speed?: {
+      showDuration?: number;
+      hideDuration?: number;
+      spawnRate?: number;
+    };
+    targetZone?: {
+      center: number;
+      tolerance: number;
+    };
+    paint?: {
+      fillPattern?: string[];
+      colorScheme?: string[];
+    };
+    music?: {
+      beatMap?: Array<{
+        time: number;
+        type: string;
+      }>;
+      accuracy: number;
+    };
+  }>(),
+  resultData: json('result_data').$type<{
+    score?: number;
+    timeElapsed?: number;
+    accuracy?: number;
+    completionRate?: number;
+    revealedContent?: string;
+  }>(),
+  completed: boolean('completed').default(false).notNull(),
+  completedAt: timestamp('completed_at'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
 
 // Templates
 export const template = pgTable('template', {
@@ -86,33 +223,6 @@ export const revealStats = pgTable('reveal_stats', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
-export const gameTemplate = pgTable('game_template', {
-  id: serial('id').primaryKey(),
-  type: GameType('type').notNull(),
-  name: text('name').notNull(),
-  description: text('description'),
-  defaultConfig: json('default_config').notNull(),
-  isActive: boolean('is_active').default(true).notNull(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
-});
-
-export const game = pgTable('game', {
-  id: serial('id').primaryKey(),
-  revealStepId: integer('reveal_step_id')
-    .references(() => revealStep.id)
-    .notNull(),
-  gameTemplateId: integer('game_template_id')
-    .references(() => gameTemplate.id)
-    .notNull(),
-  config: json('config').notNull(),
-  resultData: json('result_data'),
-  completed: boolean('completed').default(false).notNull(),
-  completedAt: timestamp('completed_at'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
-});
-
 export const userProfile = pgTable('user_profile', {
   id: serial('id').primaryKey(),
   userId: varchar('user_id', { length: 255 }).notNull().unique(),
@@ -142,19 +252,6 @@ export const userReveal = pgTable(
     revealIdIdx: index('user_reveal_reveal_id_idx').on(table.revealId),
   })
 );
-
-export const userGameProgress = pgTable('user_game_progress', {
-  id: serial('id').primaryKey(),
-  userId: varchar('user_id', { length: 255 }).notNull(),
-  gameId: integer('game_id')
-    .references(() => game.id)
-    .notNull(),
-  progress: json('progress').notNull(),
-  completed: boolean('completed').default(false).notNull(),
-  completedAt: timestamp('completed_at'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
-});
 
 export type Template = typeof template.$inferSelect;
 export type TemplateInsert = typeof template.$inferInsert;

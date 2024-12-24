@@ -8,6 +8,13 @@
       "when": 1734423533963,
       "tag": "0000_clean_frightful_four",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1734464621561,
+      "tag": "0001_bright_songbird",
+      "breakpoints": true
     }
   ]
 }
